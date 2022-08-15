@@ -1,0 +1,100 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using BugFixer.Domain.ViewModels.Admin.Tag
+@using BugFixer.Application.Extensions
+@model BugFixer.Domain.ViewModels.Admin.Tag.FilterTagAdminViewModel
+
+<div id="FilterTagsRow">
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-horizontal" asp-action="LoadFilterTagsPartial" asp-controller="Home" asp-area="Admin" id="filter_ajax_form" data-ajax-update="#FilterTagsRow"
+                  data-ajax="true" data-ajax-method="Get" data-ajax-mode="replace" data-ajax-begin="StartLoading('#LargeModalBody')" data-ajax-complete="EndLoading('#LargeModalBody')">
+                <div class="row">
+                    <input type="hidden" asp-for="CurrentPage"/>
+                    <div class="col-md-5 mb-15">
+                        <input type="text" asp-for="Title" placeholder="عنوان تگ" class="form-control">
+                    </div>
+                    <div class="col-md-5 mb-15">
+                        <select class="form-control" asp-for="Status" asp-items="Html.GetEnumSelectList(typeof(FilterTagAdminStatus))"></select>
+                    </div>
+                    <div class="col-md-2 mb-15">
+                        <button type="submit" class="btn btn-success btn-block">اعمال فیلتر</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-12 text-center">
+            @if (Model.Entities.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="bordered-darkorange">
+                        <tr>
+                            <th class="text-center">
+                                عنوان
+                            </th>
+                            <th class="text-center">
+                                تعداد استفاده
+                            </th>
+                            <th class="text-center">
+                                تاریخ ثبت
+                            </th>
+                            <th class="text-center">
+                                وضعیت
+                            </th>
+                            <th class="text-center">
+                                امکانات
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-center">
+                        @foreach (var tag in Model.Entities.OrderByDescending(s => s.CreateDate))
+                        {
+                            <tr>
+                                <td class="vertical-align-middle">
+                                    @tag.Title
+                                </td>
+                                <td class="vertical-align-middle">
+                                    @tag.UseCount
+                                </td>
+                                <td class="vertical-align-middle">
+                                    @tag.CreateDate.ToShamsi()
+                                </td>
+                                <td class="vertical-align-middle @(string.IsNullOrEmpty(tag.Description) ? "danger" : "success")">
+                                    @if (string.IsNullOrEmpty(tag.Description))
+                                    {
+                                        <span>توضیحات ندارد</span>
+                                    }
+                                    else
+                                    {
+                                        <span>توضیحات دارد</span>
+                                    }
+                                </td>
+                                <td class="vertical-align-middle">
+                                    <a href="javascript:void(0);" class="btn btn-danger btn-circle btn-xs">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
+                                    <a href="javascript:void(0);" class="btn btn-sky btn-circle btn-xs">
+                                        <i class="glyphicon glyphicon-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+
+                <partial name="_AdminPaging" model="@Model.GetPaging()"/>
+            }
+            else
+            {
+                <div class="alert alert-warning fade in">
+                    <button class="close" data-dismiss="alert">
+                        ×
+                    </button>
+                    هیچ تگی یافت نشد.
+                </div>
+            }
+        </div>
+    </div>
+</div>

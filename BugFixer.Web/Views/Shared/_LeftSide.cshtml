@@ -1,0 +1,17 @@
+﻿<!-- aside -->
+<aside>
+
+    <!-- most popular post -->
+    <section class="most-popular-questions">
+
+        @await Component.InvokeAsync("ScoreDesQuestions")
+
+        @await Component.InvokeAsync("CreateDateDesQuestions")
+
+    </section>
+    <!-- /most popular post -->
+
+    @await Component.InvokeAsync("UseCountDesTags")
+
+</aside>
+<!-- /aside -->

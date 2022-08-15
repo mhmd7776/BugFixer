@@ -1,0 +1,143 @@
+﻿@using BugFixer.Application.Extensions
+@using BugFixer.Application.Statics
+@using BugFixer.Domain.ViewModels.Question
+@model BugFixer.Domain.Entities.Questions.Question
+
+@{
+    ViewData["Title"] = "جزئیات سوال";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var tags = ViewData["TagsList"] as List<string>;
+}
+
+@section Styles
+{
+<link rel="stylesheet" type="text/css" href="/css/page.css">
+<link rel="stylesheet" type="text/css" href="/css/question.css">
+}
+
+@section Header
+{
+<partial name="_Header" />
+}
+
+<div class="user-page-style">
+
+    <div class="breadcumb-layer">
+        <div class="container">
+            <ul itemtype="http://schema.org/BreadcrumbList" class="breadcrumb">
+                <li itemtype="http://schema.org/ListItem" itemscope itemprop="itemListElement"><a href="/" itemprop="item"><span itemprop="name"> باگ فیکسر </span></a></li>
+                <li itemtype="http://schema.org/ListItem" itemscope itemprop="itemListElement"><a asp-action="QuestionList" asp-controller="Question" itemprop="item"><span itemprop="name"> پرسش ها </span></a></li>
+                <li itemtype="http://schema.org/ListItem" itemscope itemprop="itemListElement"><a href="javascript:void(0)" itemprop="item"><span itemprop="name"> @Model.Title </span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="questions-layer page-style">
+
+        <div class="container">
+
+            <div class="right-col">
+
+                <section class="question-content-layer">
+
+                    <header>
+                        <!-- use this button for edit Post , show only for author -->
+                        <button onclick="LoadUrl('@Url.Action("EditQuestion", "Question", new {id = Model.Id})')"><i class="icon-pencil-edit"></i></button>
+
+                        <h1><a href="javascript:void(0)"> @Model.Title </a></h1>
+                        <span> @Model.CreateDate.TimeAgo() </span>
+                        <span><i> @Model.ViewCount </i> بازدید </span>
+                        <span><i> @Model.Answers.Count(s => !s.IsDelete) </i> پاسخ </span>
+                        <span><i> @Model.Score </i> امتیاز </span>
+                    </header>
+
+                    <article id="QuestionDetailMainBox">
+                        <div class="inner">
+
+                            @Html.Raw(Model.Content)
+
+                            <div class="rating-layer">
+                                <div class="scoring-layer">
+                                    <button onclick="ScoreUpForQuestion('@Model.Id')" class="plus"><i class="icon-caret-up"></i></button>
+                                    <span> @Model.Score </span>
+                                    <button onclick="ScoreDownForQuestion('@Model.Id')" class="negative"><i class="icon-caret-down"></i></button>
+                                </div>
+                                <div class="star-rating">
+                                    <button onclick="AddQuestionToBookmark('@Model.Id')" class="@((ViewBag.IsBookMark) ? "gold-color" : string.Empty)"><i class="icon-star"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="detail-layer">
+                            <div class="author">
+                                <a href="javascript:void(0)" class="img-layer">
+                                    <img src="@(PathTools.UserAvatarPath + Model.User.Avatar)">
+                                </a>
+                                <h3><a href="javascript:void(0)"> @Model.User.GetUserDisplayName() </a></h3>
+                            </div>
+                            <a href="javascript:void(0)"> <i class="icon-back-arrow"></i> ثبت پاسخ به این پرسش </a>
+                            <div class="share-layer">
+                                <span> به اشتراک گذاری </span>
+                                <div class="share-detail">
+                                    <div class="short-link">
+                                        <p> لینک کوتاه شامل شناسه شما </p>
+                                        <input type="text" name="" readonly value="@($"{PathTools.SiteAddress}/q/{Model.Id}")">
+                                    </div>
+                                    <div class="socials">
+                                        <a href="https://www.facebook.com/sharer/sharer.php?u=@($"{Context.Request.Scheme}://{Context.Request.Host + Context.Request.Path}")"><i class="icon-facebook"></i></a>
+                                        <a href="https://t.me/share/url?url=@($"{Context.Request.Scheme}://{Context.Request.Host + Context.Request.Path}")"><i class="icon-telegram"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- tags -->
+                    <div class="post-tags-layer">
+                        <div class="tags-layer">
+                            @foreach (var tag in tags)
+                            {
+                                <a asp-action="QuestionListBtTag" asp-controller="Question" asp-route-tagName="@tag"> @tag </a>
+                            }
+                        </div>
+                    </div>
+                    <!-- /tags -->
+                    <!-- answer -->
+                    <div class="answers-layer" id="AnswersBox">
+                        <div class="top-layer">
+                            <h4><span> @Model.Answers.Count(s => !s.IsDelete) </span> پاسخ به این پرسش </h4>
+                        </div>
+
+                        @await Component.InvokeAsync("QuestionAnswersList", new { questionId = Model.Id })
+
+                    </div>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <partial name="_AnswerFormPartial" model="new AnswerQuestionViewModel { QuestionId = Model.Id }" />
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            برای پاسخ به سوال ابتدا باید وارد حساب کاربری خود شوید .
+                        </div>
+                    }
+
+                </section>
+
+            </div>
+
+            <partial name="_LeftSide" />
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+<partial name="_JqueryValidation" />
+<script src="/js/question.js"></script>
+}

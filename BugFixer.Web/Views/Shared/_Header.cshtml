@@ -1,0 +1,28 @@
+﻿<header class="main-header">
+    <div class="container">
+        <nav>
+            <span><i class="icon-menu-2"></i></span>
+            <div class="inner">
+
+                <partial name="_TopMenuPartial" />
+
+                <div class="clientarea-layer">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @await Component.InvokeAsync("UserMainMenuBox")
+                    }
+                    else
+                    {
+                        <div class="signout-status">
+                            <i class="icon-profile"></i>
+                            <a asp-action="Login" asp-controller="Account"> ورود / </a>
+                            <a asp-action="Register" asp-controller="Account"> عضویت </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </nav>
+
+        <a href="/" class="logo"><img src="/images/logo-dark.svg"></a>
+    </div>
+</header>

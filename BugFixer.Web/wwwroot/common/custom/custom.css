@@ -1,0 +1,102 @@
+﻿.error-style {
+    display: block;
+    color: tomato;
+    font-size: 12px;
+    margin-top: -20px;
+}
+
+.mt-50 {
+    margin-top: 50px;
+}
+
+.admin-error-style{
+    color: tomato;
+    font-size: 13px;
+}
+
+.mb-30 {
+    margin-bottom: 30px !important;
+}
+
+.mr-5 {
+    margin-right: 5px !important;
+}
+
+.vertical-align-middle{
+    vertical-align: middle !important;
+}
+
+.mt-15{
+    margin-top: 15px !important;
+}
+
+.mb-15{
+    margin-bottom: 15px !important;
+}
+
+.cursor-pointer{
+    cursor: pointer !important;
+}
+
+.gold-color {
+    color: #ffb301 !important;
+}
+
+.ms-helper {
+    margin-top: 50px !important;
+}
+
+.mt-15 {
+    margin-top: 15px !important;
+}
+
+.current {
+    color: #77c444 !important;
+    border: #77c444 2px solid !important;
+}
+
+.mb-8 {
+    margin-bottom: 8px !important;
+}
+
+.input-style {
+    position: relative !important;
+    top: 2px !important;
+    margin-left: 6px !important;
+    font-size: 14px !important;
+    width: 100% !important;
+    line-height: 32px !important;
+    padding: 0 15px !important;
+    border: 1px solid #e4ecef !important;
+    color: #6b7f9d !important;
+    word-spacing: -1px !important;
+    margin-top: 8px !important;
+    border-radius: 4px !important;
+}
+
+.display-none {
+    display: none !important;
+}
+
+.ck-label {
+    display: none !important;
+}
+
+.ck-editor__editable {
+    min-height: 300px !important;
+}
+
+.mb-10 {
+    margin-bottom: 10px !important;
+}
+
+.ui-menu-item-wrapper {
+    font-family: 'IRANSans', sans-serif !important;
+    padding: 6px !important;
+}
+
+.ui-autocomplete {
+    max-height: 150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}

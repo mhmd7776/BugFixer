@@ -20,6 +20,8 @@ namespace BugFixer.Domain.Interfaces
         Task<bool> IsExistsTagByName(string name);
 
         Task<Tag?> GetTagByName(string name);
+        
+        Task<Tag?> GetTagById(long id);
 
         Task<bool> CheckUserRequestedForTag(long userId, string tag);
 

@@ -670,7 +670,7 @@ namespace BugFixer.Application.Services.Implementations
                     break;
             }
 
-            await filter.SetPaging(query);
+            await filter.SetPaging(query.OrderByDescending(s => s.CreateDate));
 
             return filter;
         }
@@ -685,6 +685,43 @@ namespace BugFixer.Application.Services.Implementations
 
             await _questionRepository.AddTag(tag);
             await _questionRepository.SaveChanges();
+        }
+
+        public async Task<EditTagAdminViewModel?> FillEditTagAdminViewModel(long id)
+        {
+            var tag = await _questionRepository.GetTagById(id);
+
+            if (tag == null || tag.IsDelete)
+            {
+                return null;
+            }
+
+            var result = new EditTagAdminViewModel
+            {
+                Description = tag.Description,
+                Id = tag.Id,
+                Title = tag.Title
+            };
+
+            return result;
+        }
+
+        public async Task<bool> EditTagAdmin(EditTagAdminViewModel edit)
+        {
+            var tag = await _questionRepository.GetTagById(edit.Id);
+
+            if (tag == null || tag.IsDelete)
+            {
+                return false;
+            }
+
+            tag.Title = edit.Title;
+            tag.Description = edit.Description;
+
+            await _questionRepository.UpdateTag(tag);
+            await _questionRepository.SaveChanges();
+
+            return true;
         }
 
         #endregion

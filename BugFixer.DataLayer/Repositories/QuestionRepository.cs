@@ -77,6 +77,11 @@ namespace BugFixer.DataLayer.Repositories
             return await _context.Tags.FirstOrDefaultAsync(s => !s.IsDelete && s.Title.Equals(name));
         }
 
+        public async Task<Tag?> GetTagById(long id)
+        {
+            return await _context.Tags.FirstOrDefaultAsync(s => s.Id == id);
+        }
+
         #endregion
 
         #region Question

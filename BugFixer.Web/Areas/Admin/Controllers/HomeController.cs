@@ -102,6 +102,15 @@ public class HomeController : AdminBaseController
 
     #endregion
 
+    #region Online Users
+
+    public IActionResult ShowOnlineUsers()
+    {
+        return View();
+    }
+
+    #endregion
+
     #region Dashboard
 
     public async Task<IActionResult> Dashboard()

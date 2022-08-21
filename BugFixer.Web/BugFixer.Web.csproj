@@ -27,4 +27,10 @@
 	  <ProjectReference Include="..\BugFixer.IoC\BugFixer.IoC.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="wwwroot\common\signalr\admin-online-users.js" />
+	  <_ContentIncludedByDefault Remove="wwwroot\common\signalr\client-online-users.js" />
+	  <_ContentIncludedByDefault Remove="wwwroot\common\signalr\signalr.min.js" />
+	</ItemGroup>
+
 </Project>

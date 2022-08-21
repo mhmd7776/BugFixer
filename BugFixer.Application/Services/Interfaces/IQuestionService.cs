@@ -82,6 +82,8 @@ namespace BugFixer.Application.Services.Interfaces
 
         Task<bool> EditTagAdmin(EditTagAdminViewModel edit);
 
+        Task<bool> DeleteTagAdmin(long id);
+
         #endregion
     }
 }

@@ -85,6 +85,23 @@ public class HomeController : AdminBaseController
 
     #endregion
 
+    #region Delete tag
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteTag(long id)
+    {
+        var result = await _questionService.DeleteTagAdmin(id);
+        
+        if (!result)
+        {
+            return new JsonResult(new {status = "error", message = "مقادیر ورودی معتبر نمی باشد."});
+        }
+        
+        return new JsonResult(new {status = "success", message = "عملیات با موفقیت انجام شد."});
+    }
+
+    #endregion
+
     #region Dashboard
 
     public async Task<IActionResult> Dashboard()

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace BugFixer.Web.ActionFilters
 {
@@ -9,7 +8,7 @@ namespace BugFixer.Web.ActionFilters
         {
             base.OnActionExecuting(context);
 
-            if (context.HttpContext.User.Identity.IsAuthenticated)
+            if (context.HttpContext.User.Identity!.IsAuthenticated)
             {
                 context.HttpContext.Response.Redirect("/");
             }

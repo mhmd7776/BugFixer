@@ -21,7 +21,7 @@ public class OnlineUsersHub : Hub
 
     #endregion
 
-    private static readonly Dictionary<long, string> OnlineUsersList = new Dictionary<long, string>();
+    private static readonly Dictionary<long, OnlineUsersViewModel> OnlineUsersList = new Dictionary<long, OnlineUsersViewModel>();
 
     public override async Task OnConnectedAsync()
     {
@@ -42,7 +42,9 @@ public class OnlineUsersHub : Hub
             UserId = userId.Value.ToString()
         };
         
-        OnlineUsersList.Add(userId.Value, JsonConvert.SerializeObject(onlineUserViewModel));
+        OnlineUsersList.Add(userId.Value, onlineUserViewModel);
+
+        await Clients.All.SendAsync("NewUserConnected", onlineUserViewModel);
         
         await base.OnConnectedAsync();
     }
@@ -57,6 +59,15 @@ public class OnlineUsersHub : Hub
 
         OnlineUsersList.Remove(userId.Value);
         
+        await Clients.All.SendAsync("NewUserDisConnected", userId.Value.ToString());
+        
         await base.OnDisconnectedAsync(exception);
+    }
+
+    public List<OnlineUsersViewModel> GetAllConnectedUsers()
+    {
+        var users = OnlineUsersList.Values.ToList();
+
+        return users;
     }
 }

@@ -3,7 +3,6 @@ using BugFixer.Application.Services.Interfaces;
 using BugFixer.Domain.ViewModels.Admin.OnlineUsers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
 
 namespace BugFixer.Web.Hubs;
 

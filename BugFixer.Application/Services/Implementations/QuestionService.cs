@@ -323,6 +323,18 @@ namespace BugFixer.Application.Services.Implementations
                 query = query.Where(s => s.Title.Contains(filter.Title.SanitizeText().Trim()));
             }
 
+            switch (filter.CheckedStatus)
+            {
+                case FilterQuestionCheckedStatus.All:
+                    break;
+                case FilterQuestionCheckedStatus.IsChecked:
+                    query = query.Where(s => s.IsChecked);
+                    break;
+                case FilterQuestionCheckedStatus.NotChecked:
+                    query = query.Where(s => !s.IsChecked);
+                    break;
+            }
+            
             switch (filter.Sort)
             {
                 case FilterQuestionSortEnum.NewToOld:
@@ -352,6 +364,7 @@ namespace BugFixer.Application.Services.Implementations
                     QuestionId = s.Id,
                     Score = s.Score,
                     Title = s.Title,
+                    IsChecked = s.IsChecked,
                     ViewCount = s.ViewCount,
                     UserDisplayName = s.User.GetUserDisplayName(),
                     Tags = s.SelectQuestionTags.Where(a => !a.Tag.IsDelete).Select(a => a.Tag.Title).ToList(),

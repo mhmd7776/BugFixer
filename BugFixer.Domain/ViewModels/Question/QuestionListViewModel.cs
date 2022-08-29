@@ -17,6 +17,8 @@ namespace BugFixer.Domain.ViewModels.Question
         public string CreateDate { get; set; }
 
         public bool HasAnyAnswer { get; set; }
+        
+        public bool IsChecked { get; set; }
 
         public bool HasAnyTrueAnswer { get; set; }
 

@@ -72,6 +72,8 @@ namespace BugFixer.Application.Services.Interfaces
 
         #region Admin
 
+        #region Tag
+
         Task<List<TagViewModelJson>> GetTagViewModelJson();
 
         Task<FilterTagAdminViewModel> FilterTagAdmin(FilterTagAdminViewModel filter);
@@ -83,6 +85,16 @@ namespace BugFixer.Application.Services.Interfaces
         Task<bool> EditTagAdmin(EditTagAdminViewModel edit);
 
         Task<bool> DeleteTagAdmin(long id);
+
+        #endregion
+
+        #region Question
+
+        Task<bool> DeleteQuestion(long id);
+        
+        Task<bool> ChangeQuestionIsCheck(long id);
+
+        #endregion
 
         #endregion
     }

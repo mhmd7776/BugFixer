@@ -30,7 +30,8 @@ namespace BugFixer.Application.Services.Implementations
         private readonly ScoreManagementViewModel _scoreManagement;
         private readonly IUserService _userService;
 
-        public QuestionService(IQuestionRepository questionRepository, IOptions<ScoreManagementViewModel> scoreManagement, IUserService userService)
+        public QuestionService(IQuestionRepository questionRepository,
+            IOptions<ScoreManagementViewModel> scoreManagement, IUserService userService)
         {
             _questionRepository = questionRepository;
             _scoreManagement = scoreManagement.Value;
@@ -74,7 +75,8 @@ namespace BugFixer.Application.Services.Implementations
                         return new CreateQuestionResult
                         {
                             Status = CreateQuestionResultEnum.NotValidTag,
-                            Message = $"تگ {tag} برای اعتبارسنجی نیاز به {_scoreManagement.MinRequestCountForVerifyTag} درخواست دارد ."
+                            Message =
+                                $"تگ {tag} برای اعتبارسنجی نیاز به {_scoreManagement.MinRequestCountForVerifyTag} درخواست دارد ."
                         };
                     }
 
@@ -95,7 +97,8 @@ namespace BugFixer.Application.Services.Implementations
                         return new CreateQuestionResult
                         {
                             Status = CreateQuestionResultEnum.NotValidTag,
-                            Message = $"تگ {tag} برای اعتبارسنجی نیاز به {_scoreManagement.MinRequestCountForVerifyTag} درخواست دارد ."
+                            Message =
+                                $"تگ {tag} برای اعتبارسنجی نیاز به {_scoreManagement.MinRequestCountForVerifyTag} درخواست دارد ."
                         };
                     }
 
@@ -172,7 +175,8 @@ namespace BugFixer.Application.Services.Implementations
             {
                 foreach (var questionSelectedTag in createQuestion.SelectedTags)
                 {
-                    var tag = await _questionRepository.GetTagByName(questionSelectedTag.SanitizeText().Trim().ToLower());
+                    var tag = await _questionRepository.GetTagByName(
+                        questionSelectedTag.SanitizeText().Trim().ToLower());
 
                     if (tag == null) continue;
 
@@ -229,6 +233,7 @@ namespace BugFixer.Application.Services.Implementations
                 {
                     await _questionRepository.DeleteSelectedQuestionTag(currentTag);
                 }
+
                 await _questionRepository.SaveChanges();
             }
 
@@ -240,7 +245,8 @@ namespace BugFixer.Application.Services.Implementations
             {
                 foreach (var questionSelectedTag in edit.SelectedTags)
                 {
-                    var tag = await _questionRepository.GetTagByName(questionSelectedTag.SanitizeText().Trim().ToLower());
+                    var tag = await _questionRepository.GetTagByName(
+                        questionSelectedTag.SanitizeText().Trim().ToLower());
 
                     if (tag == null) continue;
 
@@ -264,7 +270,8 @@ namespace BugFixer.Application.Services.Implementations
             return true;
         }
 
-        public async Task<FilterQuestionBookmarksViewModel> FilterQuestionBookmarks(FilterQuestionBookmarksViewModel filter)
+        public async Task<FilterQuestionBookmarksViewModel> FilterQuestionBookmarks(
+            FilterQuestionBookmarksViewModel filter)
         {
             var query = _questionRepository.GetAllBookmarks();
 
@@ -334,7 +341,7 @@ namespace BugFixer.Application.Services.Implementations
                     query = query.Where(s => !s.IsChecked);
                     break;
             }
-            
+
             switch (filter.Sort)
             {
                 case FilterQuestionSortEnum.NewToOld:
@@ -368,9 +375,13 @@ namespace BugFixer.Application.Services.Implementations
                     ViewCount = s.ViewCount,
                     UserDisplayName = s.User.GetUserDisplayName(),
                     Tags = s.SelectQuestionTags.Where(a => !a.Tag.IsDelete).Select(a => a.Tag.Title).ToList(),
-                    AnswerByDisplayName = s.Answers.Any(a => !a.IsDelete) ? s.Answers.OrderByDescending(a => a.CreateDate).First().User.GetUserDisplayName() : null,
+                    AnswerByDisplayName = s.Answers.Any(a => !a.IsDelete)
+                        ? s.Answers.OrderByDescending(a => a.CreateDate).First().User.GetUserDisplayName()
+                        : null,
                     CreateDate = s.CreateDate.TimeAgo(),
-                    AnswerByCreateDate = s.Answers.Any(a => !a.IsDelete) ? s.Answers.OrderByDescending(a => a.CreateDate).First().CreateDate.TimeAgo() : null
+                    AnswerByCreateDate = s.Answers.Any(a => !a.IsDelete)
+                        ? s.Answers.OrderByDescending(a => a.CreateDate).First().CreateDate.TimeAgo()
+                        : null
                 }).AsQueryable();
 
             await filter.SetPaging(result);
@@ -502,7 +513,8 @@ namespace BugFixer.Application.Services.Implementations
             await _questionRepository.SaveChanges();
         }
 
-        public async Task<CreateScoreForAnswerResult> CreateScoreForAnswer(long answerId, AnswerScoreType type, long userId)
+        public async Task<CreateScoreForAnswerResult> CreateScoreForAnswer(long answerId, AnswerScoreType type,
+            long userId)
         {
             var answer = await _questionRepository.GetAnswerById(answerId);
 
@@ -543,6 +555,7 @@ namespace BugFixer.Application.Services.Implementations
             {
                 answer.Score += 1;
             }
+
             await _questionRepository.UpdateAnswer(answer);
 
             await _questionRepository.SaveChanges();
@@ -550,7 +563,8 @@ namespace BugFixer.Application.Services.Implementations
             return CreateScoreForAnswerResult.Success;
         }
 
-        public async Task<CreateScoreForAnswerResult> CreateScoreForQuestion(long questionId, QuestionScoreType type, long userId)
+        public async Task<CreateScoreForAnswerResult> CreateScoreForQuestion(long questionId, QuestionScoreType type,
+            long userId)
         {
             var question = await _questionRepository.GetQuestionById(questionId);
 
@@ -591,6 +605,7 @@ namespace BugFixer.Application.Services.Implementations
             {
                 question.Score += 1;
             }
+
             await _questionRepository.UpdateQuestion(question);
 
             await _questionRepository.SaveChanges();
@@ -613,7 +628,8 @@ namespace BugFixer.Application.Services.Implementations
                 return null;
             }
 
-            return new EditAnswerViewModel { 
+            return new EditAnswerViewModel
+            {
                 Answer = answer.Content,
                 AnswerId = answer.Id,
                 QuestionId = answer.QuestionId
@@ -646,8 +662,10 @@ namespace BugFixer.Application.Services.Implementations
         }
 
         #endregion
-        
+
         #region Admin
+
+        #region Tag
 
         public async Task<List<TagViewModelJson>> GetTagViewModelJson()
         {
@@ -747,12 +765,46 @@ namespace BugFixer.Application.Services.Implementations
             }
 
             tag.IsDelete = true;
-            
+
             await _questionRepository.UpdateTag(tag);
             await _questionRepository.SaveChanges();
 
             return true;
         }
+
+        #endregion
+        
+        #region Question
+
+        public async Task<bool> DeleteQuestion(long id)
+        {
+            var question = await _questionRepository.GetQuestionById(id);
+
+            if (question == null) return false;
+
+            question.IsDelete = true;
+
+            await _questionRepository.UpdateQuestion(question);
+            await _questionRepository.SaveChanges();
+
+            return true;
+        }
+
+        public async Task<bool> ChangeQuestionIsCheck(long id)
+        {
+            var question = await _questionRepository.GetQuestionById(id);
+
+            if (question == null) return false;
+
+            question.IsChecked = true;
+
+            await _questionRepository.UpdateQuestion(question);
+            await _questionRepository.SaveChanges();
+
+            return true;
+        }
+
+        #endregion
 
         #endregion
     }

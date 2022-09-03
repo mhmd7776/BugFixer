@@ -77,13 +77,16 @@
                                 <span>تعداد پاسخ ها : @question.AnswersCount</span>
                             </td>
                             <td class="vertical-align-middle">
-                                <span class="@(question.IsChecked ? "success" : "danger")">@(question.IsChecked ? "بررسی شده" : "بررسی نشده")</span>
-                                <button class="btn btn-maroon btn-xs" style="margin-right: 6px !important;">
-                                    تغییر وضعیت
-                                </button>
+                                <span id="question-is-checked-status-@question.QuestionId" class="@(question.IsChecked ? "success" : "danger")">@(question.IsChecked ? "بررسی شده" : "بررسی نشده")</span>
+                                @if (!question.IsChecked)
+                                {
+                                    <button id="question-is-checked-button-@question.QuestionId" onclick="changeQuestionIsCheckedStatus('@question.QuestionId')" class="btn btn-maroon btn-xs" style="margin-right: 6px !important;">
+                                        تغییر وضعیت
+                                    </button>
+                                }
                             </td>
                             <td class="vertical-align-middle">
-                                <a href="javascript:void(0);" class="btn btn-danger btn-circle btn-xs">
+                                <a onclick="deleteQuestion('@question.QuestionId')" href="javascript:void(0);" class="btn btn-danger btn-circle btn-xs">
                                     <i class="glyphicon glyphicon-trash"></i>
                                 </a>
                                 <a asp-controller="Question" asp-action="QuestionDetail" asp-route-questionId="@question.QuestionId" class="btn btn-sky btn-circle btn-xs">
@@ -109,3 +112,8 @@
         }
     </div>
 </div>
+
+@section Scripts
+{
+    <script src="/common/custom/admin-question.js"></script>
+}

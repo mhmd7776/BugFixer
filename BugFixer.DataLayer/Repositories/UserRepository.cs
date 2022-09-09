@@ -57,5 +57,10 @@ namespace BugFixer.DataLayer.Repositories
         {
             _context.Update(user);
         }
+
+        public IQueryable<User> GetAllUsers()
+        {
+            return _context.Users.Where(s => !s.IsDelete).AsQueryable();
+        }
     }
 }

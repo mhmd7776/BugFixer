@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BugFixer.Domain.Entities.Account;
+using BugFixer.Domain.ViewModels.Admin.User;
 using BugFixer.Domain.ViewModels.UserPanel.Account;
 
 namespace BugFixer.Application.Services.Interfaces
@@ -62,6 +63,16 @@ namespace BugFixer.Application.Services.Interfaces
         #region User Question
 
         Task UpdateUserScoreAndMedal(long userId, int score);
+
+        #endregion
+
+        #region Admin
+
+        #region User
+
+        Task<FilterUserAdminViewModel> FilterUserAdmin(FilterUserAdminViewModel filter);
+
+        #endregion
 
         #endregion
     }

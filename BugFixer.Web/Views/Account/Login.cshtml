@@ -12,7 +12,7 @@
 
 @section Header
 {
-<partial name="_Header" />
+    <partial name="_Header"/>
 }
 
 <div class="user-page-style">
@@ -20,8 +20,16 @@
     <div class="breadcumb-layer">
         <div class="container">
             <ul itemtype="http://schema.org/BreadcrumbList" class="breadcrumb">
-                <li itemtype="http://schema.org/ListItem" itemscope itemprop="itemListElement"><a href="/" itemprop="item"><span itemprop="name"> صفحه اصلی </span></a></li>
-                <li itemtype="http://schema.org/ListItem" itemscope itemprop="itemListElement"><a asp-action="Login" asp-controller="Account" itemprop="item"><span itemprop="name"> ورود به سایت </span></a></li>
+                <li itemtype="http://schema.org/ListItem" itemscope itemprop="itemListElement">
+                    <a href="/" itemprop="item">
+                        <span itemprop="name"> صفحه اصلی </span>
+                    </a>
+                </li>
+                <li itemtype="http://schema.org/ListItem" itemscope itemprop="itemListElement">
+                    <a asp-action="Login" asp-controller="Account" itemprop="item">
+                        <span itemprop="name"> ورود به سایت </span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -54,7 +62,7 @@
                 <div class="col-md-5 col-sm-12 col-xs-12 pull-right">
 
                     <form asp-action="Login" asp-controller="Account" method="post">
-                        
+
                         <input type="hidden" asp-for="ReturnUrl"/>
 
                         <div class="inner">

@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BugFixer.Application.Extensions;
 using BugFixer.Domain.Enums;
+using BugFixer.Domain.ViewModels.Admin.User;
 using BugFixer.Domain.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -338,6 +339,41 @@ namespace BugFixer.Application.Services.Implementations
                 await _userRepository.Save();
             }
         }
+
+        #endregion
+        
+        #region Admin
+
+        #region User
+
+        public async Task<FilterUserAdminViewModel> FilterUserAdmin(FilterUserAdminViewModel filter)
+        {
+            var query = _userRepository.GetAllUsers();
+
+            if (!string.IsNullOrEmpty(filter.UserSearch))
+            {
+                query = query.Where(s => (s.FirstName + " " + s.LastName).Trim().Contains(filter.UserSearch)
+                || s.Email.Contains(filter.UserSearch));
+            }
+
+            switch (filter.ActivationStatus)
+            {
+                case AccountActivationStatus.All:
+                    break;
+                case AccountActivationStatus.IsActive:
+                    query = query.Where(s => s.IsEmailConfirmed);
+                    break;
+                case AccountActivationStatus.NotActive:
+                    query = query.Where(s => !s.IsEmailConfirmed);
+                    break;
+            }
+
+            await filter.SetPaging(query);
+
+            return filter;
+        }
+
+        #endregion
 
         #endregion
     }

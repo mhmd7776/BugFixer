@@ -21,6 +21,8 @@ namespace BugFixer.Domain.Interfaces
 
         Task<User?> GetUserById(long userId);
 
+        IQueryable<User> GetAllUsers();
+
         Task Save();
     }
 }

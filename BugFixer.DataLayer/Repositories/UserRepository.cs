@@ -62,5 +62,11 @@ namespace BugFixer.DataLayer.Repositories
         {
             return _context.Users.Where(s => !s.IsDelete).AsQueryable();
         }
+
+        public async Task<bool> CheckUserHasPermission(long userId, long permissionId)
+        {
+            return await _context.UserPermissions
+                .AnyAsync(s => s.UserId == userId && s.PermissionId == permissionId);
+        }
     }
 }

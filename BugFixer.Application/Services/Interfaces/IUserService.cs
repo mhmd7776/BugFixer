@@ -72,6 +72,12 @@ namespace BugFixer.Application.Services.Interfaces
 
         Task<FilterUserAdminViewModel> FilterUserAdmin(FilterUserAdminViewModel filter);
 
+        Task<EditUserAdminViewModel?> FillEditUserAdminViewModel(long userId);
+
+        Task<EditUserAdminResult> EditUserAdmin(EditUserAdminViewModel editUserAdminViewModel);
+
+        Task<bool> CheckUserPermission(long permissionId, long userId);
+
         #endregion
 
         #endregion

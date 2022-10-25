@@ -23,6 +23,8 @@ namespace BugFixer.Domain.Interfaces
 
         IQueryable<User> GetAllUsers();
 
+        Task<bool> CheckUserHasPermission(long userId, long permissionId);
+
         Task Save();
     }
 }

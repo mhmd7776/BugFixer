@@ -54,6 +54,55 @@ function UploadUserAvatar(url) {
 
 }
 
+function UploadUserAvatarAdmin(url, userId) {
+
+    var avatarInput = document.getElementById("UserAvatar");
+
+    if (avatarInput.files.length) {
+
+        var file = avatarInput.files[0];
+
+        var formData = new FormData();
+
+        formData.append("userAvatar", file);
+        formData.append("userId", userId);
+
+        $.ajax({
+            url: url,
+            type: "post",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend: function () {
+                StartLoading('#UserInfoBox');
+            },
+            success: function (response) {
+                EndLoading('#UserInfoBox');
+                if (response.status === "Success") {
+                    location.reload();
+                } else {
+                    swal({
+                        title: "خطا",
+                        text: "فرمت فایل ارسال شده معتبر نمی باشد .",
+                        icon: "error",
+                        button: "باشه"
+                    });
+                }
+            },
+            error: function () {
+                EndLoading('#UserInfoBox');
+                swal({
+                    title: "خطا",
+                    text: "عملیات با خطا مواجه شد لطفا مجدد تلاش کنید .",
+                    icon: "error",
+                    button: "باشه"
+                });
+            }
+        });
+    }
+
+}
+
 function StartLoading(selector = 'body') {
     $(selector).waitMe({
         effect: 'bounce',
@@ -148,11 +197,9 @@ if (editors.length) {
 }
 
 $(function () {
-
     if ($("#CountryId").val() === '') {
         $("#CityId").prop("disabled", true);
     }
-
 });
 
 function SubmitQuestionForm() {
@@ -272,6 +319,14 @@ function ScoreUpForAnswer(answerId) {
 
                 $("#AnswersBox").load(location.href + " #AnswersBox");
             }
+            else if (response.status === "NotAuthorize") {
+                swal({
+                    title: "اعلان",
+                    text: "برای انتخاب پاسخ درست ابتدا وارد سایت شوید .",
+                    icon: "info",
+                    button: "باشه"
+                });
+            }
             else if (response.status === "NotEnoughScoreForDown") {
                 swal({
                     title: "اعلان",
@@ -339,6 +394,14 @@ function ScoreDownForAnswer(answerId) {
                 });
 
                 $("#AnswersBox").load(location.href + " #AnswersBox");
+            }
+            else if (response.status === "NotAuthorize") {
+                swal({
+                    title: "اعلان",
+                    text: "برای انتخاب پاسخ درست ابتدا وارد سایت شوید .",
+                    icon: "info",
+                    button: "باشه"
+                });
             }
             else if (response.status === "NotEnoughScoreForDown") {
                 swal({
@@ -416,6 +479,14 @@ function ScoreUpForQuestion(questionId) {
                     button: "باشه"
                 });
             }
+            else if (response.status === "NotAuthorize") {
+                swal({
+                    title: "اعلان",
+                    text: "برای انتخاب پاسخ درست ابتدا وارد سایت شوید .",
+                    icon: "info",
+                    button: "باشه"
+                });
+            }
             else if (response.status === "Error") {
                 swal({
                     title: "خطا",
@@ -475,6 +546,14 @@ function ScoreDownForQuestion(questionId) {
                 });
 
                 $("#QuestionDetailMainBox").load(location.href + " #QuestionDetailMainBox");
+            }
+            else if (response.status === "NotAuthorize") {
+                swal({
+                    title: "اعلان",
+                    text: "برای انتخاب پاسخ درست ابتدا وارد سایت شوید .",
+                    icon: "info",
+                    button: "باشه"
+                });
             }
             else if (response.status === "NotEnoughScoreForDown") {
                 swal({

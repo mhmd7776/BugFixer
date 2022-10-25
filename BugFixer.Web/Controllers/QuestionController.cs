@@ -320,10 +320,14 @@ namespace BugFixer.Web.Controllers
 
         #region Score Answer
 
-        [Authorize]
         [HttpPost("ScoreUpForAnswer")]
         public async Task<IActionResult> ScoreUpForAnswer(long answerId)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return new JsonResult(new { status = "NotAuthorize" });
+            }
+
             var result = await _questionService.CreateScoreForAnswer(answerId, AnswerScoreType.Plus, User.GetUserId());
 
             switch (result)
@@ -343,10 +347,14 @@ namespace BugFixer.Web.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost("ScoreDownForAnswer")]
         public async Task<IActionResult> ScoreDownForAnswer(long answerId)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return new JsonResult(new { status = "NotAuthorize" });
+            }
+
             var result = await _questionService.CreateScoreForAnswer(answerId, AnswerScoreType.Minus, User.GetUserId());
 
             switch (result)
@@ -393,9 +401,13 @@ namespace BugFixer.Web.Controllers
         #region Score Question
 
         [HttpPost("ScoreUpForQuestion")]
-        [Authorize]
         public async Task<IActionResult> ScoreUpForQuestion(long questionId)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return new JsonResult(new { status = "NotAuthorize" });
+            }
+
             var result = await _questionService.CreateScoreForQuestion(questionId, QuestionScoreType.Plus, User.GetUserId());
 
             switch (result)
@@ -416,9 +428,13 @@ namespace BugFixer.Web.Controllers
         }
 
         [HttpPost("ScoreDownForQuestion")]
-        [Authorize]
         public async Task<IActionResult> ScoreDownForQuestion(long questionId)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return new JsonResult(new { status = "NotAuthorize" });
+            }
+
             var result = await _questionService.CreateScoreForQuestion(questionId, QuestionScoreType.Minus, User.GetUserId());
 
             switch (result)

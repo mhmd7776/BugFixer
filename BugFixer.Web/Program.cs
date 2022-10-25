@@ -8,6 +8,7 @@ using GoogleReCaptcha.V3;
 using GoogleReCaptcha.V3.Interface;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using WebMarkupMin.AspNetCore6;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,27 +58,47 @@ DependencyContainer.RegisterDependencies(builder.Services);
 
 #endregion
 
+#region Minify
+
+//builder.Services.AddWebMarkupMin(
+//        options =>
+//        {
+//            options.AllowMinificationInDevelopmentEnvironment = true;
+//            options.AllowCompressionInDevelopmentEnvironment = true;
+//        })
+//    .AddHtmlMinification(
+//        options =>
+//        {
+//            options.MinificationSettings.RemoveRedundantAttributes = true;
+//            options.MinificationSettings.RemoveHttpProtocolFromAttributes = true;
+//            options.MinificationSettings.RemoveHttpsProtocolFromAttributes = true;
+//        })
+//    .AddHttpCompression();
+
+#endregion
+
 #endregion
 
 #region MiddleWares
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+//app.UseWebMarkupMin();
 
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseStatusCodePagesWithRedirects("/{0}");
 
 app.MapControllerRoute(
     name: "areas",

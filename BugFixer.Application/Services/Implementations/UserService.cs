@@ -373,6 +373,78 @@ namespace BugFixer.Application.Services.Implementations
             return filter;
         }
 
+        public async Task<EditUserAdminViewModel?> FillEditUserAdminViewModel(long userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+
+            if (user == null) return null;
+
+            return new EditUserAdminViewModel
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                PhoneNumber = user.PhoneNumber,
+                Description = user.Description,
+                BirthDate = user.BirthDate?.ToShamsi(),
+                CountryId = user.CountryId,
+                CityId = user.CityId,
+                GetNewsLetter = user.GetNewsLetter,
+                IsAdmin = user.IsAdmin,
+                IsBan = user.IsBan,
+                Avatar = user.Avatar,
+                IsEmailConfirmed = user.IsEmailConfirmed,
+                LastName = user.LastName,
+                UserId = user.Id
+            };
+        }
+
+        public async Task<EditUserAdminResult> EditUserAdmin(EditUserAdminViewModel editUserAdminViewModel)
+        {
+            var user = await _userRepository.GetUserById(editUserAdminViewModel.UserId);
+
+            if (user == null) return EditUserAdminResult.UserNotFound;
+
+            if (!user.Email.Equals(editUserAdminViewModel.Email) &&
+                await _userRepository.IsExistsUserByEmail(editUserAdminViewModel.Email))
+            {
+                return EditUserAdminResult.NotValidEmail;
+            }
+
+            user.Email = editUserAdminViewModel.Email;
+            user.FirstName = editUserAdminViewModel.FirstName;
+            user.LastName = editUserAdminViewModel.LastName;
+            user.Description = editUserAdminViewModel.Description;
+            user.IsBan = editUserAdminViewModel.IsBan;
+            user.IsEmailConfirmed = editUserAdminViewModel.IsEmailConfirmed;
+            user.GetNewsLetter = editUserAdminViewModel.GetNewsLetter;
+            user.IsAdmin = editUserAdminViewModel.IsAdmin;
+            user.BirthDate = editUserAdminViewModel.BirthDate?.ToMiladi();
+            user.PhoneNumber = editUserAdminViewModel.PhoneNumber;
+            user.CountryId = editUserAdminViewModel.CountryId;
+            user.CityId = editUserAdminViewModel.CityId;
+
+            if (!string.IsNullOrEmpty(editUserAdminViewModel.Password))
+            {
+                user.Password = PasswordHelper.EncodePasswordMd5(editUserAdminViewModel.Password);
+            }
+
+            await _userRepository.UpdateUser(user);
+            await _userRepository.Save();
+
+            return EditUserAdminResult.Success;
+        }
+
+        public async Task<bool> CheckUserPermission(long permissionId, long userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+
+            if (user == null) return false;
+
+            if (user.IsAdmin) return true;
+
+            return await _userRepository.CheckUserHasPermission(user.Id, permissionId);
+        }
+
         #endregion
 
         #endregion

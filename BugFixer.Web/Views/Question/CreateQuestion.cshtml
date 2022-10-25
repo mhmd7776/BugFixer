@@ -118,6 +118,11 @@
                     return 'لطفا حداقل 2 کاراکتر را وارد کنید';
                 },
                 noSuggestionText: '{{name}} وارد شده در پیشنهادات سایت موجود نیست',
+                beforeSend: function(xhr, settings) {
+                    if (settings.url === '/get-tags?name=') {
+                        return false;
+                    }
+                }
             });
 
             var jsonValue = $("#SelectedTagsJson").val();

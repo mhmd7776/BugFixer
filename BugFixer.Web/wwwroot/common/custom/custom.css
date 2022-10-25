@@ -5,6 +5,12 @@
     margin-top: -20px;
 }
 
+.user-admin-avatar{
+    width: 100%;
+    max-width: 200px;
+    margin-bottom: 15px;
+}
+
 .mt-50 {
     margin-top: 50px;
 }

@@ -13,7 +13,7 @@ namespace BugFixer.Application.Services.Implementations
     {
         #region Ctor
 
-        private ISiteSettingRepository _siteSettingRepository;
+        private readonly ISiteSettingRepository _siteSettingRepository;
 
         public EmailService(ISiteSettingRepository siteSettingRepository)
         {
@@ -28,8 +28,8 @@ namespace BugFixer.Application.Services.Implementations
             {
                 var defaultSiteEmail = await _siteSettingRepository.GetDefaultEmail();
 
-                MailMessage mail = new MailMessage();
-                SmtpClient SmtpServer = new SmtpClient(defaultSiteEmail.SMTP);
+                var mail = new MailMessage();
+                var smtpServer = new SmtpClient(defaultSiteEmail.SMTP);
 
                 mail.From = new MailAddress(defaultSiteEmail.From, defaultSiteEmail.DisplayName);
                 mail.To.Add(to);
@@ -39,16 +39,16 @@ namespace BugFixer.Application.Services.Implementations
 
                 if (defaultSiteEmail.Port != 0)
                 {
-                    SmtpServer.Port = defaultSiteEmail.Port;
-                    SmtpServer.EnableSsl = defaultSiteEmail.EnableSSL;
+                    smtpServer.Port = defaultSiteEmail.Port;
+                    smtpServer.EnableSsl = defaultSiteEmail.EnableSSL;
                 }
 
-                SmtpServer.Credentials = new System.Net.NetworkCredential(defaultSiteEmail.From, defaultSiteEmail.Password);
-                SmtpServer.Send(mail);
+                smtpServer.Credentials = new System.Net.NetworkCredential(defaultSiteEmail.From, defaultSiteEmail.Password);
+                smtpServer.Send(mail);
 
                 return true;
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 return false;
             }

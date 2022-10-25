@@ -10,7 +10,7 @@
         <div class="img-layer">
             <input type="file" onchange="UploadUserAvatar('@Url.Action("ChangeUserAvatar", "Home", new {area = "UserPanel"})')" name="UserAvatar" id="UserAvatar" accept=".png, .jpg, .jpeg" class="display-none"/>
             <a onclick="OpenAvatarInput()" class="change-image"><i class="icon-pencil-edit"></i></a>
-            <img src="@PathTools.UserAvatarPath@Model.Avatar">
+            <img src="@PathTools.UserAvatarPath@Model.Avatar" alt="avatar">
         </div>
         @{
             var className = string.Empty;
